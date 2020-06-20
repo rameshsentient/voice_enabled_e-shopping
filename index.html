@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+    <meta charset="utf-8">
+    <title>Sentient.io iHACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/docs.css" rel="stylesheet">
+    <link href="assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/prettyPhoto.css" type="text/css" media="screen" title="prettyPhoto main stylesheet" charset="utf-8" />
+   
+    <!-- fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+    
+   
+
+    <!--FONT ASOME ICONS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--/FONT ASOME ICONS-->
+
+    <script>
+		navigator.getUserMedia = (
+			navigator.getUserMedia ||
+			navigator.webkitGetUserMedia ||
+			navigator.mozGetUserMedia ||
+			navigator.msGetUserMedia
+		);
+		if (typeof navigator.mediaDevices.getUserMedia === 'undefined') {
+			navigator.getUserMedia({ audio: true }, function (e) {
+			console.log('mic enabled');
+			}, function (err) {
+				console.log('mic disabled');
+			})
+		} else {
+			navigator.getUserMedia({ audio: true }, function (e) {
+			console.log('mic enabled');
+			}, function (err) {
+				console.log('mic disabled');
+			})
+		}
+  </script>
+</head>
+    <body ng-app="myApp" ng-controller="appCtrl" ng-cloak>
+    <div class="top_line"></div>
+    <!--HEADER-->
+    <header>
+    	<div class="container" style="background:none; box-shadow:none;">
+            <div class="row">
+                <div class="span8">
+                    <h1 class="welcome"><span span class="label">Sentient.io</span> iHACK </h1>
+                    <h4 class="welcome" style="padding-top:10px;">Voice-enabled E-shopping Application</h4>
+                </div> 
+            </div>
+        </div>
+	</header>
+	<!--/HEADER-->
+    <!--Main content-->
+
+    
+   
+    <div class="row" ng-show="login" style="margin-top: 180px;">
+        <div class="span6 offset5">
+            
+            <div class="well" style="text-align: center;">
+                <h4>Log In</h4></br></br>
+                <span ng-if="invalid_login" style="padding: 10px;color: tomato;">Invalid username or password</span>
+                <form class="form" id="ajax-contact-form" action="javascript:alert('Was send!');">
+                    <input type="text" ng-model="username" class="span4" placeholder="Usename" />
+                    <input  type="password" ng-model="password" class="span4 margin10" placeholder="Password" />
+                    
+                    <input type="button" ng-click="login()" class="btn btn-success span4 margin10" value="Log In" style="width: 30%;"/>
+                </form>
+
+            </div>
+        </div>
+        <div class="span3"></div>
+        </div>
+
+    <!--Navigation-->
+    <div class="container" style="background:none; box-shadow:none;" ng-if="loggedin">
+        <div class="row">
+            <div class="span12">
+                <nav style="float:right;">
+                    <ul class="nav nav-tabs">
+                        <li><a href="javascript:;" ><i class="icon-shopping-cart"></i> Cart</a></li>
+                        <li ng-click="logout()"><a href="javascript:;" ><i class="icon-user"></i> Logout</a></li>
+                    </ul>
+                </nav><!-- end #main-nav -->
+            </div>
+        </div>
+    </div>
+    <!--/Navigation-->
+
+
+        <!--Vcard area-->
+    	<div class="container bordered" ng-if="loggedin">
+            <div class="row">
+                <div class="tab-content">
+                
+                    <!--About-->
+                    <div class=" span12 tab-pane fade in active" id="about">
+                        
+                        <div class="row" ng-show="record">
+                            <div class="span6 offset3">
+                                
+                                <div class="intro">
+                                    <p style="margin-bottom:10px;text-align: center;">Tap and hold mic icon for voice input</p>
+                                </div>
+                                <hr class="dash">
+                                <div class="well" style="text-align: center;">
+                                    <button class="btn-round-white" ng-show="init_record" id="record">
+                                      <img src="assets/img/mic.svg" width="60%" />
+                                    </button>
+                                   
+                                    <img src="assets/img/loading_spinner.gif" width="20%" id="loader" style="visibility: hidden;"/>
+
+                                    <input type="text" id="keyword" ng-blur="goShopping()" ng-enter="goShopping()" placeholder="Captured keywords" style="margin-top: 20px;padding: 5px;width: 90%;border-radius: 12px;"/>
+                                    <div class="intro">
+                                        <p style="margin-bottom:10px;text-align: center;">Searching will automatically start when mouse key is rebased</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3"></div>
+                            </div>
+
+                            <div class="row" ng-show="result">
+                                <div class="span10 offset1">
+                                    <h3><span class="colored"><strong></strong></span> Search Results</h3>
+                                    
+                                    <div class="well">
+                                        <div class="flex-caption-i" ng-repeat="res in results track by $index">
+                                            <h4>{{res.title}}</h4>
+                                            <p>{{res.desc}} <br><br><a class="btn btn-success btn-small" style="margin-right:10%" href="{{res.url}}" target="_blank"><i class="icon-shopping-cart icon-white"></i> Buy for {{res.price}}$</a></p>
+                                        </div>
+                                    <span ng-if="results.length<1">no result found</span>
+                                    </div>
+                                </div>
+                                <div class="span1"></div>
+                                </div>
+                    </div>
+                    <!--/About-->
+                </div><!--/tabs container-->
+            </div>
+        </div>
+        <!--/Vcard area-->
+        
+    <!--/Main content-->
+
+
+<div id="myModal" class="modal hide fade">
+    
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Do you want to continue?</h3>
+    </div>
+    
+    <div class="modal-body" style="text-align: center;"> 
+
+        <button class="btn-round-white">
+            <img src="assets/img/mic.svg" width="60%"  ng-mousedown="setRecord()"   />
+        </button>
+        
+        <p>Tap and hold mic icon and say YES to continue for next 5 results or say NO to go home page.</p>
+        
+    </div>
+    
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+    </div>
+</div>
+    
+    <!--Shadow-->
+    <div class="container" style="background:none; box-shadow:none; text-align:center;margin-top: 30px;">
+        <div class="row">
+            <img class="shadow" src="assets/img/shadow.png"/>
+        </div>
+    </div>
+    <!--/Shadow-->
+    
+    <!--Copyright-->
+    <div class="container copy" style="background:none; box-shadow:none;">
+        <div class="row">
+            <div class="span12">
+                <p>Copyright 2020 Sentient.io.</p>
+            </div>
+        </div>
+    </div>
+    <!--/Copyright-->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap-tab.js"></script>
+    <script src="assets/js/bootstrap-button.js"></script>
+    
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/js/custom.js"></script>
+    
+
+    <script src="assets/src/recorder.js"></script>
+    <script src="assets/src/Fr.voice.js"></script>
+    <script type="text/javascript" src="assets/js/cont.js"></script>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>  
+	<!--[if IE]>
+    <script type="text/javascript">
+        runFancy = false;
+    </script>
+    <![endif]-->
+    <script type="text/javascript">
+  
+		
+    </script>
+    <!-- Paste this code after body tag -->
+	<div class="se-pre-con" ng-if="spinner"></div>
+	<!-- Ends -->
+    </body>
+    
+
+</html>
